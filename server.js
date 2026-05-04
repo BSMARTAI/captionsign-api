@@ -22,3 +22,16 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`CaptionSign API running on port ${PORT}`);
 });
+
+app.get("/health", (req, res) => {
+  res.json({ status: "ok", service: "CaptionSign API" });
+});
+
+app.post("/translate", (req, res) => {
+  const { text } = req.body;
+  res.json({
+    original: text,
+    translated: text ? text.toUpperCase() : "",
+    engine: "CaptionSign Core v1"
+  });
+});
