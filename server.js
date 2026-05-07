@@ -1,37 +1,35 @@
-const express = require("express");
+app.post("/process", async (req, res) => {
+  const { text, mode } = req.body;
 
-const app = express();
-app.use(express.json());
+  if (!text) {
+    return res.status(400).json({ error: "Text input required" });
+  }
 
-app.get("/", (req, res) => {
-  res.json({ status: "CaptionSign IBM Core Active" });
-});
+  try {
+    let output;
 
-app.post("/transcribe", async (req, res) => {
-  const { text } = req.body;
+    if (mode === "fingerspell") {
+      output = {
+        letters: text.split("").map(c => c.toUpperCase())
+      };
+    } else {
+      output = {
+        caption: text
+      };
+    }
 
-  res.json({
-    received: text,
-    provider: "IBM Cloud",
-    status: "processing-ready"
-  });
-});
+    res.json({
+      status: "success",
+      mode: mode || "caption",
+      modelVersion: "watsonx-v1",
+      timestamp: new Date().toISOString(),
+      output
+    });
 
-const PORT = process.env.PORT || 8080;
-
-app.listen(PORT, () => {
-  console.log(`CaptionSign API running on port ${PORT}`);
-});
-
-app.get("/health", (req, res) => {
-  res.json({ status: "ok", service: "CaptionSign API" });
-});
-
-app.post("/translate", (req, res) => {
-  const { text } = req.body;
-  res.json({
-    original: text,
-    translated: text ? text.toUpperCase() : "",
-    engine: "CaptionSign Core v1"
-  });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: error.message
+    });
+  }
 });
