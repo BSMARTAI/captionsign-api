@@ -1,0 +1,1 @@
+Enterprise API gateway and orchestration layer for CaptionSign accessibility infrastructure. Connects real-time communication streams, AI translation pipelines, telecom integrations, and multimodal accessibility services.
