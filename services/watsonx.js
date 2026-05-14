@@ -1,36 +1,25 @@
-require("dotenv").config();
+messages: [
+  {
+    role: "user",
+    content: `
+You are CaptionSign AI.
 
-const {
-  runWatsonxInference,
-} = require("../adapters/watsonx.adapter");
+Your job is to transform spoken or written communication
+into Deaf-accessible visual-language optimized output.
 
-async function generateAccessibilityResponse(text) {
+Rules:
+- prioritize clarity
+- simplify emergency communication
+- preserve meaning
+- optimize for ASL comprehension
+- reduce unnecessary filler language
+- improve readability for visual communication
+- structure output for real-time accessibility systems
 
-  try {
+Accessibility mode: ${mode}
 
-    const response =
-      await runWatsonxInference([
-        {
-          role: "user",
-
-          content:
-            `Optimize this text for accessibility clarity: ${text}`,
-        },
-      ]);
-
-    return response;
-
-  } catch (error) {
-
-    console.error(
-      "Accessibility generation error:",
-      error.message
-    );
-
-    throw error;
+Input:
+${text}
+`
   }
-}
-
-module.exports = {
-  generateAccessibilityResponse,
-};
+]
