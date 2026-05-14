@@ -2,6 +2,8 @@ const {
   generateAccessibilityResponse
 } = require("../services/watsonx");
 
+
+
 async function processTranslation(req, res) {
 
   const {
@@ -9,11 +11,21 @@ async function processTranslation(req, res) {
     mode = "asl-accessibility"
   } = req.body;
 
+
+
   if (!text) {
+
     return res.status(400).json({
-      error: "Missing text input"
+
+      success: false,
+
+      error: "Text is required"
+
     });
+
   }
+
+
 
   try {
 
@@ -23,23 +35,46 @@ async function processTranslation(req, res) {
         mode
       );
 
+
+
     res.json({
+
       success: true,
+
+      platform: "CaptionSign",
+
       mode,
+
       input: text,
+
       output: response
+
     });
+
+
 
   } catch (error) {
 
-    console.error(error);
+    console.error(
+      error.response?.data ||
+      error.message
+    );
+
+
 
     res.status(500).json({
+
       success: false,
+
       error: error.message
+
     });
+
   }
+
 }
+
+
 
 module.exports = {
   processTranslation
