@@ -30,11 +30,21 @@ async function generateAccessibilityResponse(text, mode = "standard-asl") {
     const response = await axios.post(
       `${IBM_URL}/ml/v1/text/chat?version=2024-05-31`,
       {
-        model_id: "ibm/granite-3-8b-instruct",
+        model_id: model_id: "ibm/granite-4-8b-instruct",
 
         project_id: IBM_PROJECT_ID,
 
-        messages: [
+parameters: {
+  decoding_method: "greedy",
+  max_new_tokens: 300,
+  min_new_tokens: 20,
+  repetition_penalty: 1.1,
+  temperature: 0.2,
+  top_p: 0.8,
+  stop_sequences: ["```", "</json>"]
+},
+
+messages: [
           {
             role: "system",
 
